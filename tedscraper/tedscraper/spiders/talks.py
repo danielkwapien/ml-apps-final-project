@@ -38,7 +38,6 @@ class TEDscraper(scrapy.Spider):
             'event': d['videoContext'],
             'duration': d['duration'],
             'topic_names': [topic['name'] for topic in d['topics']['nodes']],
-            'views': d['viewedCount'],
-            'likes': response.css('.items-center span').re_first('->(.+)<!')
+            'views': d['viewedCount']
         }
  
