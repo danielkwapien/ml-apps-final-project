@@ -28,6 +28,13 @@ class TEDscraper(scrapy.Spider):
         js = json.loads(raw)
         # create dict with talk data of interest
         d = js['props']['pageProps']['videoData']
+
+        transcript = ''
+        if not js['props']['pageProps']['transcriptData']['translation'] or js['props']['pageProps']['transcriptData']['translation']['language']['englishName'] == 'English':
+            for paragraph in js['props']['pageProps']['transcriptData']['translation']['paragraphs'][0:2]:
+                for cue in paragraph['cues']:
+                    transcript += cue['text'] + ' '
+
         yield {
             'talk_id': d['id'],
             'title': d['title'],
@@ -38,6 +45,7 @@ class TEDscraper(scrapy.Spider):
             'event': d['videoContext'],
             'duration': d['duration'],
             'topic_names': [topic['name'] for topic in d['topics']['nodes']],
+            'transcription': transcript,
             'views': d['viewedCount']
         }
  
